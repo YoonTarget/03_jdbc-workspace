@@ -31,7 +31,7 @@ public class TestRun {
 		 * 7) 다 사용한 jdbc객체를 반드시 자원 반납!! 안하면 디비 락 걸림!! (close) => 생성된 역순으로!!
 		 */
 		
-		// 1. 각자 pc(localhost)에 JDBC계정에 연결한 후 TEST 테이블에 INSERT 해보기
+		// 1. 각자 pc(localhost)에 JDBC계정을 연결한 후 TEST 테이블에 INSERT 해보기
 		// insert문 => 처리된 행 수 (int) => 트랜젝션 처리
 		
 		Scanner sc = new Scanner(System.in);
