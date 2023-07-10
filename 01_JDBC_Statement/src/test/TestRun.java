@@ -1,7 +1,9 @@
 package test;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
@@ -31,6 +33,7 @@ public class TestRun {
 		 * 7) 다 사용한 jdbc객체를 반드시 자원 반납!! 안하면 디비 락 걸림!! (close) => 생성된 역순으로!!
 		 */
 		
+		/*
 		// 1. 각자 pc(localhost)에 JDBC계정을 연결한 후 TEST 테이블에 INSERT 해보기
 		// insert문 => 처리된 행 수 (int) => 트랜젝션 처리
 		
@@ -98,6 +101,63 @@ public class TestRun {
 				System.out.println("insert 실패ㅠㅠ");
 			}
 			
+		}
+		*/
+		
+		// 2. 내 pc의 DB 상에 JDBC계정에 TEST 테이블에 있는 모든 데이터 조회해보기
+		// 	  SELECT문 => 결과 ResultSet(조회된 데이터들 담겨있음) 받기 => ResultSet으로부터 데이터 뽑기
+		
+		// 필요한 변수들 셋팅
+		
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rset = null; // select문 실행하여 조회된 결과값들이 처음에 실질적으로 담길 객체
+		
+		// 실행할 sql문
+		//String sql = "SELECT * FROM TEST";
+		//String sql = "SELECT * FROM TEST WHERE TNO = 1";
+		String sql = "SELECT * FROM TEST WHERE TNAME LIKE '%훈'";
+		
+		try {
+			// 1) jdbc driver 등록
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			
+			// 2) Connection 객체 생성
+			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "JDBC", "JDBC");
+			
+			// 3) Statement 객체 생성
+			stmt = conn.createStatement();
+			
+			// 4,5) sql문 전달해서 실행 후 결과 받기(ResultSet 객체)
+			rset = stmt.executeQuery(sql);
+			
+			// rset.next() => 커서를 움직이는 메소드 boolean : 다음에 데이터가 있으면 true, 없으면 false
+			
+			// 6)
+			while(rset.next()) {
+				// 현재 참조하는 rset으로부터 어떤 컬럼에 해당하는 값을 어떤 타입으로 뽑을건지 제시해야됨!!
+				// db의 컬럼명 제시!(대소문자 가리지 않음!)
+				
+				int tno = rset.getInt("TNO");
+				String tname= rset.getString("TNAME");
+				Date tdate = rset.getDate("TDATE"); // import시 무조건 sql에 있는 걸로!!
+				
+				System.out.println(tno + ", " + tname + ", " + tdate);
+			}
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				// 7) 다 쓴 자원 반납
+				rset.close();
+				stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		
 	}
