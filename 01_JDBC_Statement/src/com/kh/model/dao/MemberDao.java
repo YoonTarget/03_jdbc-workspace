@@ -240,15 +240,21 @@ public class MemberDao {
 		
 	}
 	
-	public ArrayList<Member> selectByUserName(String userName) {
-		
+	/**
+	 * 사용자의 이름으로 키워드 검색 요청시 처리해주는 메소드
+	 * @param keyword
+	 * @return
+	 */
+	public ArrayList<Member> selectByUserName(String keyword) {
+		// select문 수행 (여러행) => ResultSet
+		// ArrayList로 짜야함
 		ArrayList<Member> list = new ArrayList<>();
 		
 		Connection conn = null;
 		Statement stmt = null;
 		ResultSet rset = null;
 		
-		String sql = "SELECT * FROM MEMBER WHERE USERNAME LIKE '%" + userName + "%'";
+		String sql = "SELECT * FROM MEMBER WHERE USERNAME LIKE '%" + keyword + "%'";
 		
 		try {
 			
@@ -261,19 +267,19 @@ public class MemberDao {
 			rset = stmt.executeQuery(sql);
 			
 			while(rset.next()) {
-				Member m = new Member(rset.getInt("userno"),
-								rset.getString("userid"), 
-								rset.getString("userpwd"), 
-								rset.getString("username"), 
-								rset.getString("gender"), 
-								rset.getInt("age"), 
-								rset.getString("email"), 
-								rset.getString("phone"), 
-								rset.getString("address"), 
-								rset.getString("hobby"), 
-								rset.getDate("enrolldate"));
 				
-				list.add(m);
+				list.add(new Member(rset.getInt("userno"),
+									rset.getString("userid"), 
+									rset.getString("userpwd"), 
+									rset.getString("username"), 
+									rset.getString("gender"), 
+									rset.getInt("age"), 
+									rset.getString("email"), 
+									rset.getString("phone"), 
+									rset.getString("address"), 
+									rset.getString("hobby"), 
+									rset.getDate("enrolldate")));
+				
 			}
 			
 		} catch (ClassNotFoundException e) {
@@ -294,13 +300,20 @@ public class MemberDao {
 		
 	}
 	
-	public int deleteMember(int userNo) {
+	/**
+	 * 사용자가 입력한 아이디의 회원 정보를 삭제하는 메소드
+	 * @param userId : 사용자가 입력한 아이디
+	 * @return result : 처리된 행수
+	 */
+	public int deleteMember(String userId) {
+		// delete from member where userid = ????
+		// delete문 => 처리된 행 수 (int) => 트랜젝션 처리
 		
 		int result = 0;
 		Connection conn = null;
 		Statement stmt = null;
 		
-		String sql = "DELETE FROM MEMBER WHERE USERNO = " + userNo;
+		String sql = "DELETE FROM MEMBER WHERE USERID = '" + userId + "'";
 		
 		try {
 			
@@ -336,6 +349,57 @@ public class MemberDao {
 		
 	}
 	
-	
+	/**
+	 * 사용자가 입력한 아이디의 정보 변경 요청 처리해주는 메소드
+	 * @param m
+	 * @return result : 처리된 행수
+	 */
+	public int updateMember(Member m) {
+		// update문 => 처리된 행수(int) => 트랜젝션 처리
+		int result = 0;
+		Connection conn = null;
+		Statement stmt = null;
+		
+		String sql = "UPDATE MEMBER "
+				+ "SET USERPWD = '" + m.getUserPwd() + "', "
+				+ "EMAIL = '" + m.getEmail() + "', "
+				+ "PHONE = '" + m.getPhone() + "', "
+				+ "ADDRESS = '" + m.getAddress() + "' "
+				+ "WHERE USERID = '" + m.getUserId() + "'";
+		
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			
+			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "JDBC", "JDBC");
+			
+			//conn.setAutoCommit(false);
+			
+			stmt = conn.createStatement();
+			
+			result = stmt.executeUpdate(sql);
+			
+			if(result > 0) {
+				conn.commit();
+			}
+			else {
+				conn.rollback();
+			}
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				stmt.close();
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return result;
+		
+	}
 	
 }

@@ -71,6 +71,7 @@ public class MemberMenu {
 				System.out.println("이용해 주셔서 감사합니다.");
 				return;
 			case 9 :
+				mc.selectByName(inputMemberName());
 				break;
 			default :
 				System.out.println("메뉴를 잘못 입력하셨습니다. 다시 입력해 주세요.");
