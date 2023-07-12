@@ -124,9 +124,9 @@ public class MemberController {
 		}
 	}
 	
-	public void selectByName(String userName) {
+	public void selectByFullName(String userName) {
 		
-		ArrayList<Member> list = new MemberService().selectByName(userName);
+		ArrayList<Member> list = new MemberService().selectByFullName(userName);
 		
 		if(list.isEmpty()) {
 			new MemberMenu().displayNoData("'" + userName + "'" + "에 해당하는 검색결과가 없습니다.");

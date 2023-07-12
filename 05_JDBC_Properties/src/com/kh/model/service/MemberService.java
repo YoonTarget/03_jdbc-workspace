@@ -42,10 +42,10 @@ public class MemberService {
 		
 	}
 	
-	public ArrayList<Member> selectByName(String userName) {
+	public ArrayList<Member> selectByFullName(String userName) {
 		
 		Connection conn = getConnection();
-		ArrayList<Member> list = new MemberDao().selectByName(conn, userName);
+		ArrayList<Member> list = new MemberDao().selectByFullName(conn, userName);
 		
 		close(conn);
 		
