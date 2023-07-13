@@ -10,7 +10,11 @@ public class ProductMenu {
 	
 	private Scanner sc = new Scanner(System.in);
 	private ProductController pc = new ProductController();
+	private int menu;
 	
+	/**
+	 * 메뉴 실행 화면
+	 */
 	public void mainMenu() {
 		
 		while(true) {
@@ -25,7 +29,7 @@ public class ProductMenu {
 			
 			System.out.print("\n메뉴 선택 >> ");
 			
-			int menu = sc.nextInt();
+			menu = sc.nextInt();
 			
 			sc.nextLine();
 			
@@ -34,14 +38,16 @@ public class ProductMenu {
 				pc.selectAll();
 				break;
 			case 2 :
-				insertProduct(selectByProductId());
+				insertProduct("상품 추가");
 				break;
 			case 3 :
-				updateProduct(selectByProductId());
+				updateProduct("상품 수정");
 				break;
 			case 4 :
+				deleteProduct("상품 삭제");
 				break;
 			case 5 :
+				selectByKewwordOfProduct("상품 검색");
 				break;
 			case 0 :
 				System.out.println("프로그램을 종료합니다. 이용해 주셔서 감사합니다.");
@@ -53,7 +59,20 @@ public class ProductMenu {
 		
 	}
 	
-	public void insertProduct(String productId) {
+	// ========================== 각 메뉴의 메소드들 ==========================
+	
+	public String selectByProductId() {
+		
+		return sc.nextLine();
+		
+	}
+	
+	public void insertProduct(String message) {
+		
+		System.out.println("\n==== " + message + "====");
+		
+		System.out.print("상품 아이디 : ");
+		String productId = selectByProductId();
 		
 		System.out.print("상품명 : ");
 		String pName = sc.nextLine();
@@ -71,7 +90,12 @@ public class ProductMenu {
 		
 	}
 	
-	public void updateProduct(String productId) {
+	public void updateProduct(String message) {
+		
+		System.out.println("\n==== " + message + "====");
+		
+		System.out.print("조회할 상품 아이디 : ");
+		String productId = selectByProductId();
 		
 		System.out.print("변경할 상품명 : ");
 		String pName = sc.nextLine();
@@ -85,14 +109,28 @@ public class ProductMenu {
 		System.out.print("변경할 재고 : ");
 		String stock = sc.nextLine();
 		
-		pc.insertProduct(new Product(productId, pName, Integer.parseInt(price), description, Integer.parseInt(stock)));
+		pc.updateProduct(new Product(productId, pName, Integer.parseInt(price), description, Integer.parseInt(stock)));
 	
 	}
 	
-	public String selectByProductId() {
+	public void deleteProduct(String message) {
 		
-		System.out.print("상품 아이디 : ");
-		return  sc.nextLine();
+		System.out.println("\n==== " + message + "====");
+		
+		System.out.print("조회할 상품 아이디 : ");
+		
+		pc.deleteProduct(selectByProductId());
+		
+	}
+	
+	public void selectByKewwordOfProduct(String message) {
+		
+		System.out.println("\n==== " + message + "====");
+		
+		System.out.print("상품 이름으로 키워드 검색 : ");
+		String pName = sc.nextLine();
+		
+		//pc.selectByKewwordOfProduct(pName);
 		
 	}
 	
