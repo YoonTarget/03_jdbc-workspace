@@ -35,19 +35,16 @@ public class ProductMenu {
 			
 			switch(menu) {
 			case 1 :
-				pc.selectAll();
+				System.out.println("\n==== 전체 조회 ====");
+				pc.selectProduct("", menu); // "" => 메뉴 5번과 같은 메소드를 사용하기 때문에 매개변수를 전달해줘야 한다
 				break;
-			case 2 :
-				insertProduct("상품 추가");
-				break;
-			case 3 :
-				updateProduct("상품 수정");
-				break;
-			case 4 :
-				deleteProduct("상품 삭제");
+			case 2 : case 3 : case 4:
+				inputProduct();
 				break;
 			case 5 :
-				selectByKewwordOfProduct("상품 검색");
+				System.out.println("\n==== 상품 검색 ====");
+				System.out.print("상품 이름으로 키워드 검색 : ");
+				pc.selectProduct(keyboard(), menu);
 				break;
 			case 0 :
 				System.out.println("프로그램을 종료합니다. 이용해 주셔서 감사합니다.");
@@ -61,91 +58,87 @@ public class ProductMenu {
 	
 	// ========================== 각 메뉴의 메소드들 ==========================
 	
-	public String selectByProductId() {
+	/**
+	 * 상품 id or 이름(키워드) 입력 메소드
+	 * @return productId
+	 */
+	public String keyboard() {
 		
 		return sc.nextLine();
 		
 	}
 	
-	public void insertProduct(String message) {
+	/**
+	 * 상품 추가, 수정, 삭제 메소드
+	 * @param message
+	 */
+	public void inputProduct() {
 		
-		System.out.println("\n==== " + message + "====");
+		String message = "";
+		
+		if(menu == 2) {
+			message = "상품 추가";
+		}
+		else if(menu == 3) {
+			message = "상품 수정";
+		}
+		else {
+			message = "상품 삭제";
+		}
+		
+		
+		System.out.println("\n==== " + message +" ====");
+		
+		String update = "";
+		
+		if(menu == 3) {
+			update = "변경할 ";
+		}
 		
 		System.out.print("상품 아이디 : ");
-		String productId = selectByProductId();
+		String productId = keyboard();
 		
-		System.out.print("상품명 : ");
+		if(menu == 4) {
+			pc.deleteProduct(productId);
+			return;
+		}
+		
+		System.out.print(update + "상품명 : ");
 		String pName = sc.nextLine();
 		
-		System.out.print("상품가격 : ");
+		System.out.print(update + "상품가격 : ");
 		String price = sc.nextLine();
 		
-		System.out.print("상품 상세 정보 : ");
+		System.out.print(update + "상품 상세 정보 : ");
 		String description = sc.nextLine();
 		
-		System.out.print("재고 : ");
+		System.out.print(update + "재고 : ");
 		String stock = sc.nextLine();
 		
-		pc.insertProduct(new Product(productId, pName, Integer.parseInt(price), description, Integer.parseInt(stock)));
-		
-	}
-	
-	public void updateProduct(String message) {
-		
-		System.out.println("\n==== " + message + "====");
-		
-		System.out.print("조회할 상품 아이디 : ");
-		String productId = selectByProductId();
-		
-		System.out.print("변경할 상품명 : ");
-		String pName = sc.nextLine();
-		
-		System.out.print("변경할 상품가격 : ");
-		String price = sc.nextLine();
-		
-		System.out.print("변경할 상품 상세 정보 : ");
-		String description = sc.nextLine();
-		
-		System.out.print("변경할 재고 : ");
-		String stock = sc.nextLine();
-		
-		pc.updateProduct(new Product(productId, pName, Integer.parseInt(price), description, Integer.parseInt(stock)));
-	
-	}
-	
-	public void deleteProduct(String message) {
-		
-		System.out.println("\n==== " + message + "====");
-		
-		System.out.print("조회할 상품 아이디 : ");
-		
-		pc.deleteProduct(selectByProductId());
-		
-	}
-	
-	public void selectByKewwordOfProduct(String message) {
-		
-		System.out.println("\n==== " + message + "====");
-		
-		System.out.print("상품 이름으로 키워드 검색 : ");
-		String pName = sc.nextLine();
-		
-		//pc.selectByKewwordOfProduct(pName);
+		pc.inputProduct(new Product(productId, pName, Integer.parseInt(price), description, Integer.parseInt(stock)), menu);
 		
 	}
 	
 	// ========================== 응답화면 ==========================
 	
+	/**
+	 * DML문 실행 결과를 알려주는 메소드
+	 * @param message
+	 */
 	public void displayResult(String message) {
 		
 		System.out.println("\n" + message);
 		
 		if(message.contains("성공")) {
-			pc.selectAll();
+			pc.selectProduct("", 1);
 		}
 		
 	}
 	
+	/**
+	 * SELECT문 실행에 성공했을 때 list를 출력하는 메소드
+	 * @param list
+	 */
 	public void displayShowList(ArrayList<Product> list) {
 		
 		System.out.println("\n==== 조회 결과 ====");

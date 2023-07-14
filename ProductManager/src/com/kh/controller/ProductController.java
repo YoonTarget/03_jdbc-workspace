@@ -8,9 +8,14 @@ import com.kh.view.ProductMenu;
 
 public class ProductController {
 	
-	public void selectAll() {
+	/**
+	 * 상품 조회 메소드
+	 * @param pName
+	 * @param menu
+	 */
+	public void selectProduct(String pName, int menu) {
 		
-		ArrayList<Product> list = new ProductService().selectAll();
+		ArrayList<Product> list = new ProductService().selectProduct(pName, menu);
 		
 		if(list.isEmpty()) {
 			new ProductMenu().displayResult("조회 결과가 없습니다.");
@@ -21,55 +26,55 @@ public class ProductController {
 		
 	}
 	
-	public void insertProduct(Product p) {
+	/**
+	 * 상품 추가, 수정 메소드
+	 * @param p
+	 * @param menu
+	 */
+	public void inputProduct(Product p, int menu) {
 		
-		int result = new ProductService().insertProduct(p);
+		int result = new ProductService().inputProduct(p, menu);
 		
+		String message = "";
 		String str = "";
 		
-		if(result > 0) {
-			str = "성공적으로 상품을 추가했습니다.";
+		if(menu == 2) {
+			str = "추가";
 		}
 		else {
-			str = "상품 추가에 실패했습니다.";
+			str = "수정";
 		}
 		
-		new ProductMenu().displayResult(str);
+		if(result > 0) {
+			message = "성공적으로 상품을 " + str + "했습니다.";
+		}
+		else {
+			message = "상품 " + str + "에 실패했습니다.";
+		}
+		
+		new ProductMenu().displayResult(message);
 		
 	}
 	
-	public void updateProduct(Product p) {
-		
-		int result = new ProductService().updateProduct(p);
-		
-		String str = "";
-		
-		if(result > 0) {
-			str = "성공적으로 상품을 수정했습니다.";
-		}
-		else {
-			str = "상품 수정에 실패했습니다.";
-		}
-		
-		new ProductMenu().displayResult(str);
-		
-	}
-	
+	/**
+	 * 상품 삭제 메소드
+	 * @param productId
+	 */
 	public void deleteProduct(String productId) {
 		
 		int result = new ProductService().deleteProduct(productId);
 		
-		String str = "";
+		String message = "";
 		
 		if(result > 0) {
-			str = "성공적으로 상품을 삭제했습니다.";
+			message = "성공적으로 상품을 삭제했습니다.";
 		}
 		else {
-			str = "상품 삭제에 실패했습니다.";
+			message = "상품 삭제에 실패했습니다.";
 		}
 		
-		new ProductMenu().displayResult(str);
+		new ProductMenu().displayResult(message);
 		
 	}
-
+	
 }

@@ -46,7 +46,6 @@
 		  	 , HOBBY
 		  	 , ENROLLDATE	
 		  FROM MEMBER 
-		 ORDER BY AGE
 	</entry>
 	<entry key = "selectByUserId">
 		SELECT

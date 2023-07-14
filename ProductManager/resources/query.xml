@@ -50,6 +50,6 @@
 		  	 , DESCRIPTION
 		  	 , STOCK
 		  FROM PRODUCT
-		 WHERE PNAME LIKE ?
+		 WHERE P_NAME LIKE '%'||?||'%'
 	</entry>
 </properties>
