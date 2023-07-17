@@ -8,9 +8,7 @@ import com.kh.view.PhoneBookMenu;
 
 public class PhoneBookController {
 	
-	public void insertPhone(String userName, String age, String address, String phone) {
-		
-		PhoneBook pb = new PhoneBook(userName, Integer.parseInt(age), address, phone);
+	public void insertPhone(PhoneBook pb) {
 		
 		int result = new PhoneBookService().insertPhone(pb);
 		
@@ -22,6 +20,16 @@ public class PhoneBookController {
 		}
 		
 	}
+	
+//	public void selectPhoneByNo(String phone) {
+//		
+//		PhoneBook pb = new PhoneBookService().selectPhoneByNo(phone);
+//		
+//		if(pb == null) {
+//			new PhoneBookMenu().displayNoData("조회 결과가 없습니다.");
+//		}
+//		
+//	}
 	
 	public void selectPhone() {
 		

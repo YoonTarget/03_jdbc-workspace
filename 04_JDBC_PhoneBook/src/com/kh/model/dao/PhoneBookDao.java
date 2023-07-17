@@ -47,7 +47,7 @@ public class PhoneBookDao {
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		
-		String sql = "SELECT * FROM TB_PHONEBOOK ORDER BY USERNO";
+		String sql = "SELECT * FROM TB_PHONEBOOK";
 		
 		try {
 			pstmt = conn.prepareStatement(sql);

@@ -24,17 +24,21 @@ public class PhoneBookMenu {
 			
 			System.out.print("\n메뉴 >> ");
 			
-			int num = sc.nextInt();
+			int menu = sc.nextInt();
 			
 			sc.nextLine();
 			
-			switch(num) {
+			switch(menu) {
 			case 1 :
-				inputPhone("== 전화번호 등록 ==");
+				System.out.println("== 전화번호 등록 ==");
+				inputPhone();
 				break;
 			case 2 :
+				System.out.println("== 전화번호 검색 ==");
+				//pc.selectPhoneByNo(selectNo());
 				break;
 			case 3 :
+				System.out.println("== 전화번호 전체조회 ==");
 				pc.selectPhone();
 				break;
 			case 4 :
@@ -49,9 +53,14 @@ public class PhoneBookMenu {
 		
 	}
 	
-	public void inputPhone(String message) {
+	public String selectNo() {
 		
-		System.out.println("\n" + message);
+		System.out.print("전화번호('-' 포함) : ");
+		
+		return sc.nextLine();
+	}
+	
+	public void inputPhone() {
 		
 		System.out.print("이름 : ");
 		String userName = sc.nextLine();
@@ -62,10 +71,11 @@ public class PhoneBookMenu {
 		System.out.print("주소('구'까지만) : ");
 		String address = sc.nextLine();
 		
-		System.out.print("전화번호('-' 포함) : ");
-		String phone = sc.nextLine();
+		String phone = selectNo();
 		
-		pc.insertPhone(userName, age, address, phone);
+		PhoneBook pb = new PhoneBook(userName, Integer.parseInt(age), address, phone);
+		
+		pc.insertPhone(pb);
 		
 	}
 	
@@ -90,7 +100,11 @@ public class PhoneBookMenu {
 	
 	public void displayShowList(ArrayList<PhoneBook> list) {
 		
+		System.out.println("\n검색 결과 : ");
 		
+		for(PhoneBook pb : list) {
+			System.out.println(pb);
+		}
 		
 	}
 
